@@ -2,31 +2,27 @@
 
 import {element} from 'deku'
 import classnames from 'classnames'
+import { propertify, addClassify, colorProps, sizeProps } from './utils'
 
-let propTypes = {
+const colorify = propertify(colorProps)
+const sizeify = propertify(sizeProps)
+const addSizeClasses = addClassify('btn-', sizeProps)
+const addColorClasses = addClassify('btn-', colorProps)
+
+let propTypes = sizeify(colorify({
   kind: {
     type: 'string',
     expects: ['submit', 'button', 'anchor']
-  },
-  success: {
-    type: 'boolean',
-    optional: true
-  },
-  lg: {
-    type: 'boolean',
-    optional: true
   }
-}
+}))
 
 function render (component) {
   let {props} = component
-  console.dir(props)
 
-  const classes = classnames('btn',
-  {
-	'btn-success': props.success,
-	'btn-lg': props.lg
-  })
+  const classes = classnames(
+    'btn',
+    addSizeClasses(props, addColorClasses(props))
+  )
 
   if (props.kind === 'anchor') {
     return <a class={classes}>{props.children}</a>
